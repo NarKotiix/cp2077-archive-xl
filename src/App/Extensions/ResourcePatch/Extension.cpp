@@ -290,6 +290,8 @@ void App::ResourcePatchExtension::OnEntityTemplateLoad(Red::EntityTemplate* aTem
 
                 if (isNewAppearance)
                 {
+                    if (!aTemplate->appearances)
+                        aTemplate->appearances = {};
                     aTemplate->appearances.EmplaceBack(patchAppearance);
 
                     LogDebug(R"([{}] Appearance "{}" from "{}" added to "{}".)",
@@ -325,6 +327,8 @@ void App::ResourcePatchExtension::OnEntityTemplateLoad(Red::EntityTemplate* aTem
 
                 if (isNewDependency)
                 {
+                    if (!aTemplate->resolvedDependencies)
+                        aTemplate->resolvedDependencies = {};
                     aTemplate->resolvedDependencies.PushBack(dependency);
 
                     LogDebug(R"([{}] Dependency "{}" from "{}" added to "{}".)",
@@ -421,6 +425,8 @@ void App::ResourcePatchExtension::OnAppearanceResourceLoad(Red::AppearanceResour
 
                             if (isNewPart)
                             {
+                                if (!existingDefinition->partsValues)
+                                    existingDefinition->partsValues = {};
                                 existingDefinition->partsValues.PushBack(partValue);
 
                                 LogDebug(R"([{}] Part resource "{}" from "{}" of "{}" added to "{}" of "{}".)",
@@ -492,6 +498,8 @@ void App::ResourcePatchExtension::OnAppearanceResourceLoad(Red::AppearanceResour
 
                 if (isNewAppearance)
                 {
+                    if (!aResource->appearances)
+                        aResource->appearances = {};
                     aResource->appearances.EmplaceBack(patchDefinition);
                     newAppearances.insert(patchDefinition->name);
 
@@ -586,6 +594,8 @@ void App::ResourcePatchExtension::OnMeshResourceLoad(Red::CMesh* aMesh, Red::Pos
 
                     if (isNewAppearance)
                     {
+                        if (!aMesh->appearances)
+                            aMesh->appearances = {};
                         aMesh->appearances.EmplaceBack(cloneAppearance);
 
                         LogDebug(R"([{}] Appearance "{}" from "{}" added to "{}".)",
@@ -723,6 +733,8 @@ void App::ResourcePatchExtension::OnMorphTargetResourceLoad(Red::MorphTargetMesh
 
                 if (isNewTarget)
                 {
+                    if (!aMorphTarget->targets)
+                        aMorphTarget->targets = {};
                     aMorphTarget->targets.EmplaceBack(patchTarget);
 
                     LogDebug(R"([{}] Morph target "{}" from "{}" added to "{}".)",
