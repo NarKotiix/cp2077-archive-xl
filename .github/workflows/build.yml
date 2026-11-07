@@ -1,0 +1,42 @@
+name: Build ArchiveXL
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install xmake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: latest
+
+      - name: Configure
+        run: xmake f -m release -p windows -a x64
+
+      - name: Build
+        run: xmake build
+
+      - name: Package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path dist -Force
+          Copy-Item "build\windows\x64\release\ArchiveXL.dll" -Destination "dist\" -Force
+          if (Test-Path "build\windows\x64\release\ArchiveXL.archive") {
+              Copy-Item "build\windows\x64\release\ArchiveXL.archive" -Destination "dist\" -Force
+          }
+          Compress-Archive -Path "dist\*" -DestinationPath "ArchiveXL-build.zip" -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ArchiveXL-build
+          path: ArchiveXL-build.zip
