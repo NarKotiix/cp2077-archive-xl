@@ -290,7 +290,7 @@ void App::ResourcePatchExtension::OnEntityTemplateLoad(Red::EntityTemplate* aTem
 
                 if (isNewAppearance)
                 {
-                    if (!aTemplate->appearances)
+                    if (aTemplate->appearances.IsEmpty())
                         aTemplate->appearances = {};
                     aTemplate->appearances.EmplaceBack(patchAppearance);
 
@@ -327,7 +327,7 @@ void App::ResourcePatchExtension::OnEntityTemplateLoad(Red::EntityTemplate* aTem
 
                 if (isNewDependency)
                 {
-                    if (!aTemplate->resolvedDependencies)
+                    if (aTemplate->resolvedDependencies.IsEmpty())
                         aTemplate->resolvedDependencies = {};
                     aTemplate->resolvedDependencies.PushBack(dependency);
 
@@ -425,7 +425,7 @@ void App::ResourcePatchExtension::OnAppearanceResourceLoad(Red::AppearanceResour
 
                             if (isNewPart)
                             {
-                                if (!existingDefinition->partsValues)
+                                if (existingDefinition->partsValues.IsEmpty())
                                     existingDefinition->partsValues = {};
                                 existingDefinition->partsValues.PushBack(partValue);
 
@@ -498,7 +498,7 @@ void App::ResourcePatchExtension::OnAppearanceResourceLoad(Red::AppearanceResour
 
                 if (isNewAppearance)
                 {
-                    if (!aResource->appearances)
+                    if (aResource->appearances.IsEmpty())
                         aResource->appearances = {};
                     aResource->appearances.EmplaceBack(patchDefinition);
                     newAppearances.insert(patchDefinition->name);
@@ -594,7 +594,7 @@ void App::ResourcePatchExtension::OnMeshResourceLoad(Red::CMesh* aMesh, Red::Pos
 
                     if (isNewAppearance)
                     {
-                        if (!aMesh->appearances)
+                        if (aMesh->appearances.IsEmpty())
                             aMesh->appearances = {};
                         aMesh->appearances.EmplaceBack(cloneAppearance);
 
@@ -733,7 +733,7 @@ void App::ResourcePatchExtension::OnMorphTargetResourceLoad(Red::MorphTargetMesh
 
                 if (isNewTarget)
                 {
-                    if (!aMorphTarget->targets)
+                    if (aMorphTarget->targets.IsEmpty())
                         aMorphTarget->targets = {};
                     aMorphTarget->targets.EmplaceBack(patchTarget);
 
