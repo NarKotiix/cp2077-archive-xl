@@ -20,10 +20,10 @@ jobs:
           xmake-version: latest
 
       - name: Configure
-        run: xmake f -m release -p windows -a x64
+        run: xmake f -m release -p windows -a x64 -y
 
       - name: Build
-        run: xmake build
+        run: xmake build -y
 
       - name: Package
         shell: pwsh
