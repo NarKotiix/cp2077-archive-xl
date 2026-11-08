@@ -27,7 +27,7 @@ std::string_view App::WorldStreamingExtension::GetName()
 
 bool App::WorldStreamingExtension::Load()
 {
-    HookAfter<Raw::StreamingSector::PostLoad>(&OnSectorPostLoad).OrThrow();
+    // HookAfter<Raw::StreamingSector::PostLoad>(&OnSectorPostLoad).OrThrow(); // DISABLED FOR TESTING
     Hook<Raw::AIWorkspotManager::RegisterSpots>(&OnRegisterSpots).OrThrow();
 
     s_dummyNode = Red::MakeHandle<Red::worldStaticMeshNode>();
