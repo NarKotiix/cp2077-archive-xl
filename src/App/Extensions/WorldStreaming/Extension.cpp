@@ -219,6 +219,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             else if (nodeMutation.nodeType == InstancedMeshNodeType)
             {
                 auto* meshNode = Red::Cast<Red::worldInstancedMeshNode>(nodeDefinition);
+                if (!meshNode || nodeSetup.innerNodeIndex >= (int32_t)meshNode->transformRanges.Size()) { nodeValidationPassed = false; continue; }
                 auto instanceCount = meshNode->transformRanges[nodeSetup.innerNodeIndex].numTransforms;
                 if (instanceCount != nodeMutation.expectedElements)
                 {
@@ -356,6 +357,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             else if (nodeDeletion.nodeType == InstancedMeshNodeType)
             {
                 auto* meshNode = Red::Cast<Red::worldInstancedMeshNode>(nodeDefinition);
+                if (!meshNode || nodeSetup.innerNodeIndex >= (int32_t)meshNode->transformRanges.Size()) { nodeValidationPassed = false; continue; }
                 auto instanceCount = meshNode->transformRanges[nodeSetup.innerNodeIndex].numTransforms;
                 if (instanceCount != nodeDeletion.expectedElements)
                 {
@@ -615,10 +617,12 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             if (nodeMutation.nodeType == InstancedMeshNodeType)
             {
                 auto meshNode = Red::Cast<Red::worldInstancedMeshNode>(nodeDefinition);
+                if (!meshNode || nodeSetup.innerNodeIndex >= (int32_t)meshNode->transformRanges.Size()) continue;
                 auto startIndex = meshNode->transformRanges[nodeSetup.innerNodeIndex].transformStartIndex;
 
                 for (const auto& elementMutation : nodeMutation.elementMutations)
                 {
+                    if (startIndex + elementMutation.elementIndex >= (int32_t)meshNode->cookedWorldTransformsBuffer.Size()) continue;
                     auto& instanceTransform = meshNode->cookedWorldTransformsBuffer[startIndex + elementMutation.elementIndex];
 
                     if (elementMutation.modifyPosition)
@@ -642,6 +646,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             if (nodeMutation.nodeType == InstancedDestructibleNodeType)
             {
                 auto* meshNode = Red::Cast<Red::worldInstancedDestructibleMeshNode>(nodeDefinition);
+                if (!meshNode) continue;
                 auto inverseTransform = nodeSetup.transform.Inverse();
 
                 for (const auto& elementMutation : nodeMutation.elementMutations)
@@ -726,10 +731,12 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             if (nodeDeletion.nodeType == InstancedMeshNodeType)
             {
                 auto* meshNode = Red::Cast<Red::worldInstancedMeshNode>(nodeDefinition);
+                if (!meshNode || nodeSetup.innerNodeIndex >= (int32_t)meshNode->transformRanges.Size()) continue;
                 auto startIndex = meshNode->transformRanges[nodeSetup.innerNodeIndex].transformStartIndex;
 
                 for (const auto& elementDeletion : nodeDeletion.elementDeletions)
                 {
+                    if (startIndex + elementDeletion.elementIndex >= (int32_t)meshNode->cookedWorldTransformsBuffer.Size()) continue;
                     auto& transform = meshNode->cookedWorldTransformsBuffer[startIndex + elementDeletion.elementIndex];
                     transform.scale.X = 0;
                     transform.scale.Y = 0;
@@ -742,9 +749,11 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             if (nodeDeletion.nodeType == InstancedDestructibleNodeType)
             {
                 auto* meshNode = Red::Cast<Red::worldInstancedDestructibleMeshNode>(nodeDefinition);
+                if (!meshNode) continue;
 
                 for (const auto& elementDeletion : nodeDeletion.elementDeletions)
                 {
+                    if (elementDeletion.elementIndex >= (int32_t)meshNode->instanceTransforms.Size()) continue;
                     auto& instance = meshNode->instanceTransforms[elementDeletion.elementIndex];
                     instance.position.Z = -2000;
                 }
@@ -756,6 +765,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
         if (nodeDeletion.nodeType == InstancedMeshNodeType)
         {
             auto* meshNode = Red::Cast<Red::worldInstancedMeshNode>(nodeDefinition);
+            if (!meshNode || nodeSetup.innerNodeIndex >= (int32_t)meshNode->transformRanges.Size()) continue;
             auto startIndex = meshNode->transformRanges[nodeSetup.innerNodeIndex].transformStartIndex;
             auto numElements = meshNode->transformRanges[nodeSetup.innerNodeIndex].numTransforms;
             for (auto i = 0; i < numElements; ++i)
