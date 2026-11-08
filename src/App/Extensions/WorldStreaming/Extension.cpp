@@ -117,11 +117,17 @@ void App::WorldStreamingExtension::PostConfigure()
 
 void App::WorldStreamingExtension::OnSectorPostLoad(Red::world::StreamingSector* aSector, uint64_t)
 {
+    if (!aSector)
+        return;
+
     std::shared_lock _(s_sectorsLock);
 
     const auto& sectorMods = s_sectors.find(aSector->path);
 
     if (sectorMods == s_sectors.end())
+        return;
+
+    if (sectorMods.value().empty())
         return;
 
     const auto& sectorPath = sectorMods.value().begin()->path;
