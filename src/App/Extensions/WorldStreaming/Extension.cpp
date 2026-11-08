@@ -169,7 +169,10 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
     for (const auto& nodeMutation : aSectorMod.nodeMutations)
     {
         auto& nodeSetup = aSector->compiled.buffer.nodeSetups.At(nodeMutation.nodeIndex);
-        auto* nodeDefinition = aSector->compiled.nodes[nodeSetup.nodeIndex].instance;
+        auto* nodeDefinition = (nodeSetup.nodeIndex < (int32_t)aSector->compiled.nodes.Size()) ? aSector->compiled.nodes[nodeSetup.nodeIndex].instance : nullptr;
+
+        if (!nodeDefinition)
+            continue;
 
         if (nodeMutation.nodeType != nodeDefinition->GetNativeType()->name)
         {
@@ -244,7 +247,10 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
     for (const auto& nodeDeletion : aSectorMod.nodeDeletions)
     {
         auto& nodeSetup = aSector->compiled.buffer.nodeSetups.At(nodeDeletion.nodeIndex);
-        auto* nodeDefinition = aSector->compiled.nodes[nodeSetup.nodeIndex].instance;
+        auto* nodeDefinition = (nodeSetup.nodeIndex < (int32_t)aSector->compiled.nodes.Size()) ? aSector->compiled.nodes[nodeSetup.nodeIndex].instance : nullptr;
+
+        if (!nodeDefinition)
+            continue;
 
         if (nodeDeletion.nodeType != nodeDefinition->GetNativeType()->name)
         {
@@ -383,7 +389,10 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
     for (const auto& nodeMutation : aSectorMod.nodeMutations)
     {
         auto& nodeSetup = aSector->compiled.buffer.nodeSetups.At(nodeMutation.nodeIndex);
-        auto* nodeDefinition = aSector->compiled.nodes[nodeSetup.nodeIndex].instance;
+        auto* nodeDefinition = (nodeSetup.nodeIndex < (int32_t)aSector->compiled.nodes.Size()) ? aSector->compiled.nodes[nodeSetup.nodeIndex].instance : nullptr;
+
+        if (!nodeDefinition)
+            continue;
 
         if (nodeMutation.modifyPosition)
         {
@@ -660,7 +669,10 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
     for (const auto& nodeDeletion : aSectorMod.nodeDeletions)
     {
         auto& nodeSetup = aSector->compiled.buffer.nodeSetups.At(nodeDeletion.nodeIndex);
-        auto* nodeDefinition = aSector->compiled.nodes[nodeSetup.nodeIndex].instance;
+        auto* nodeDefinition = (nodeSetup.nodeIndex < (int32_t)aSector->compiled.nodes.Size()) ? aSector->compiled.nodes[nodeSetup.nodeIndex].instance : nullptr;
+
+        if (!nodeDefinition)
+            continue;
 
         if (!nodeDeletion.elementDeletions.empty())
         {
