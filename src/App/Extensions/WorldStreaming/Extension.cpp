@@ -181,6 +181,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
         if (!nodeDefinition)
             continue;
 
+        LogInfo("[WorldStreaming] PatchSector: checking node #{} type", nodeMutation.nodeIndex);
         if (nodeMutation.nodeType != nodeDefinition->GetNativeType()->name)
         {
             LogError(R"([{}] {}: The target node #{} has type {}, but the mod expects {}.)",
@@ -211,6 +212,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             {
                 auto collisionNode = Red::Cast<Red::worldCookedCollisionNode>(nodeDefinition);
                 if (!collisionNode) { nodeValidationPassed = false; continue; }
+                LogInfo("[WorldStreaming] PatchSector: GetInnerNodes (collision)");
                 auto innerNodes = collisionNode->GetInnerNodes();
                 if (nodeSetup.innerNodeIndex >= (int32_t)innerNodes.Size()) continue;
                 if (nodeSetup.innerNodeIndex < innerNodes.Size())
@@ -296,6 +298,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
                 if (!nodeDeletion.elementDeletions.empty())
                 {
                     if (!collisionNode) continue;
+                LogInfo("[WorldStreaming] PatchSector: GetCollisionDataView (no index)");
                 auto collisionData = collisionNode->GetCollisionDataView();
 
                     for (const auto& elementDeletion : nodeDeletion.elementDeletions)
@@ -328,6 +331,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             {
                 auto collisionNode = Red::Cast<Red::worldCookedCollisionNode>(nodeDefinition);
                 if (!collisionNode) { nodeValidationPassed = false; continue; }
+                LogInfo("[WorldStreaming] PatchSector: GetInnerNodes (collision)");
                 auto innerNodes = collisionNode->GetInnerNodes();
                 if (nodeSetup.innerNodeIndex >= (int32_t)innerNodes.Size()) continue;
                 if (nodeSetup.innerNodeIndex < innerNodes.Size())
@@ -346,6 +350,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
                     if (!nodeDeletion.elementDeletions.empty())
                     {
                         if (!collisionNode) continue;
+                LogInfo("[WorldStreaming] PatchSector: GetCollisionDataView (index={})", nodeSetup.innerNodeIndex);
                 auto collisionData = collisionNode->GetCollisionDataView(nodeSetup.innerNodeIndex);
 
                         for (const auto& elementDeletion : nodeDeletion.elementDeletions)
@@ -451,6 +456,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             }
             else if (auto* cookedMeshNode = Red::Cast<Red::worldCookedStaticMeshNode>(nodeDefinition))
             {
+                LogInfo("[WorldStreaming] PatchSector: GetInnerNodes (cookedMesh)");
                 auto innerNodes = cookedMeshNode->GetInnerNodes();
                 if (nodeSetup.innerNodeIndex >= (int32_t)innerNodes.Size()) continue;
                 if (nodeSetup.innerNodeIndex < innerNodes.Size())
@@ -469,6 +475,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             }
             else if (auto* cookedProxyNode = Red::Cast<Red::worldCookedGenericProxyMeshNode>(nodeDefinition))
             {
+                LogInfo("[WorldStreaming] PatchSector: GetInnerNodes (cookedProxy)");
                 auto innerNodes = cookedProxyNode->GetInnerNodes();
                 if (nodeSetup.innerNodeIndex >= (int32_t)innerNodes.Size()) continue;
                 if (nodeSetup.innerNodeIndex < innerNodes.Size())
@@ -534,6 +541,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             }
             else if (auto* cookedMeshNode = Red::Cast<Red::worldCookedStaticMeshNode>(nodeDefinition))
             {
+                LogInfo("[WorldStreaming] PatchSector: GetInnerNodes (cookedMesh)");
                 auto innerNodes = cookedMeshNode->GetInnerNodes();
                 if (nodeSetup.innerNodeIndex >= (int32_t)innerNodes.Size()) continue;
                 if (nodeSetup.innerNodeIndex < innerNodes.Size())
@@ -543,6 +551,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             }
             else if (auto* cookedProxyNode = Red::Cast<Red::worldCookedGenericProxyMeshNode>(nodeDefinition))
             {
+                LogInfo("[WorldStreaming] PatchSector: GetInnerNodes (cookedProxy)");
                 auto innerNodes = cookedProxyNode->GetInnerNodes();
                 if (nodeSetup.innerNodeIndex >= (int32_t)innerNodes.Size()) continue;
                 if (nodeSetup.innerNodeIndex < innerNodes.Size())
@@ -600,6 +609,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
                 auto* collisionNode = Red::Cast<Red::worldCollisionNode>(nodeDefinition);
                 if (!collisionNode) continue;
                 if (!collisionNode) continue;
+                LogInfo("[WorldStreaming] PatchSector: GetCollisionDataView (no index)");
                 auto collisionData = collisionNode->GetCollisionDataView();
 
                 for (const auto& elementMutation : nodeMutation.elementMutations)
@@ -625,12 +635,14 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             {
                 auto* collisionNode = Red::Cast<Red::worldCookedCollisionNode>(nodeDefinition);
                 if (!collisionNode) continue;
+                LogInfo("[WorldStreaming] PatchSector: GetInnerNodes (collision)");
                 auto innerNodes = collisionNode->GetInnerNodes();
                 if (nodeSetup.innerNodeIndex >= (int32_t)innerNodes.Size()) continue;
 
                 if (nodeSetup.innerNodeIndex < innerNodes.Size())
                 {
                     if (!collisionNode) continue;
+                LogInfo("[WorldStreaming] PatchSector: GetCollisionDataView (index={})", nodeSetup.innerNodeIndex);
                 auto collisionData = collisionNode->GetCollisionDataView(nodeSetup.innerNodeIndex);
 
                     for (const auto& elementMutation : nodeMutation.elementMutations)
@@ -730,6 +742,7 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
                 auto* collisionNode = Red::Cast<Red::worldCollisionNode>(nodeDefinition);
                 if (!collisionNode) continue;
                 if (!collisionNode) continue;
+                LogInfo("[WorldStreaming] PatchSector: GetCollisionDataView (no index)");
                 auto collisionData = collisionNode->GetCollisionDataView();
 
                 for (const auto& elementDeletion : nodeDeletion.elementDeletions)
@@ -753,12 +766,14 @@ bool App::WorldStreamingExtension::PatchSector(Red::worldStreamingSector* aSecto
             {
                 auto* collisionNode = Red::Cast<Red::worldCookedCollisionNode>(nodeDefinition);
                 if (!collisionNode) continue;
+                LogInfo("[WorldStreaming] PatchSector: GetInnerNodes (collision)");
                 auto innerNodes = collisionNode->GetInnerNodes();
                 if (nodeSetup.innerNodeIndex >= (int32_t)innerNodes.Size()) continue;
 
                 if (nodeSetup.innerNodeIndex < innerNodes.Size())
                 {
                     if (!collisionNode) continue;
+                LogInfo("[WorldStreaming] PatchSector: GetCollisionDataView (index={})", nodeSetup.innerNodeIndex);
                 auto collisionData = collisionNode->GetCollisionDataView(nodeSetup.innerNodeIndex);
 
                     for (const auto& elementDeletion : nodeDeletion.elementDeletions)
